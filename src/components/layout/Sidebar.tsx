@@ -7,12 +7,12 @@ const navItems = [
 
 export default function Sidebar() {
   return (
-    <aside className="w-52 shrink-0 bg-white border-r border-gray-200 flex flex-col">
+    <aside className="w-full sm:w-52 shrink-0 bg-white border-b sm:border-b-0 sm:border-r border-gray-200 flex flex-col">
       <div className="px-5 py-4 border-b border-gray-100">
         <h1 className="text-sm font-bold text-gray-800">FE 공고 대시보드</h1>
         <p className="text-xs text-gray-400 mt-0.5">Frontend Jobs Tracker</p>
       </div>
-      <nav className="flex-1 p-3 space-y-1">
+      <nav className="flex-1 p-3 flex flex-row sm:flex-col space-x-1 sm:space-x-0 sm:space-y-1 overflow-x-auto">
         {navItems.map(({ to, label, icon }) => (
           <NavLink
             key={to}

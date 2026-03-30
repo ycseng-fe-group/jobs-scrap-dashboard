@@ -17,7 +17,7 @@ export default function DashboardPage() {
   if (error) return <div className="p-6 text-red-500">오류: {error}</div>;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-6">
       <h2 className="text-xl font-bold text-gray-800">대시보드</h2>
       <StatCardRow
         totalActive={stats.totalActive}

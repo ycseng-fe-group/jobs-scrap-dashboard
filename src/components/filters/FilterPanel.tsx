@@ -13,7 +13,7 @@ export default function FilterPanel({ filters, setFilters }: Props) {
   }
 
   return (
-    <aside className="w-60 shrink-0 bg-white border-r border-gray-200 p-4 overflow-y-auto">
+    <aside className="w-full lg:w-60 shrink-0 bg-white border-b lg:border-b-0 lg:border-r border-gray-200 p-4 overflow-y-auto max-h-80 sm:max-h-96 lg:max-h-none">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-sm font-semibold text-gray-700">필터</h2>
         {filters.techs.length > 0 && (

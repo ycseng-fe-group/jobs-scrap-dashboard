@@ -12,14 +12,14 @@ export default function ListPage() {
   if (error) return <div className="p-6 text-red-500">오류: {error}</div>;
 
   return (
-    <div className="flex h-full overflow-hidden">
+    <div className="flex flex-col lg:flex-row">
       <FilterPanel filters={filters} setFilters={setFilters} />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col">
         <TopBar
           search={filters.search}
           onSearch={(v) => setFilters({ ...filters, search: v })}
         />
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 p-4 sm:p-6">
           <ActiveFilters
             techs={filters.techs}
             onRemove={(tech) =>
