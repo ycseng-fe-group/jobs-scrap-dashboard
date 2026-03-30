@@ -1,6 +1,46 @@
 import Groq from "groq-sdk";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
+const STOPWORDS = new Set([
+  "서비스",
+  "외국어",
+  "학습",
+  "랭디",
+  "시장",
+  "성장",
+  "미래",
+  "도전",
+  "개발",
+]);
+
+const KOREAN_COMMON_WORDS = new Set([
+  "작성",
+  "공유",
+  "조정",
+  "수행",
+  "경험",
+  "협업",
+  "관리",
+  "운영",
+  "개선",
+  "설계",
+  "구현",
+]);
+
+// 표기가 다양한 경우만 정규화 (자기 자신으로 매핑되는 항목은 제외)
+const CANONICAL_MAP: Record<string, string> = {
+  ReactJs: "React",
+  ReactJS: "React",
+  "React.js": "React",
+  NextJs: "Next.js",
+  NextJS: "Next.js",
+  "Restful API": "REST API",
+  RestAPI: "REST API",
+  restAPI: "REST API",
+  "Tanstack Query": "TanStack Query",
+  TurboRepo: "Turborepo",
+};
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") return res.status(405).end();
 
@@ -15,18 +55,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
   // ---- fallback(LLM 실패시 로컬 가공) ----
-  const stopwords = new Set([
-    "서비스",
-    "외국어",
-    "학습",
-    "랭디",
-    "시장",
-    "성장",
-    "미래",
-    "도전",
-    "개발",
-  ]);
-
   const normalize = (s: string) =>
     s
       .replace(/^["'`]+|["'`]+$/g, "")
@@ -34,49 +62,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       .replace(/\s+/g, " ")
       .trim();
 
-  const canonicalize = (s: string) => {
-    const map: Record<string, string> = {
-      ReactJs: "React",
-      ReactJS: "React",
-      "React.js": "React",
-      NextJs: "Next.js",
-      NextJS: "Next.js",
-      "Restful API": "REST API",
-      RestAPI: "REST API",
-      restAPI: "REST API",
-      GraphQL: "GraphQL",
-      WebRTC: "WebRTC",
-      WebSocket: "WebSocket",
-      "TanStack Query": "TanStack Query",
-      "Tanstack Query": "TanStack Query",
-      Zustand: "Zustand",
-      Jotai: "Jotai",
-      Vite: "Vite",
-      TurboRepo: "Turborepo",
-      pnpm: "pnpm",
-      GitHub: "GitHub",
-      GitLab: "GitLab",
-      AWS: "AWS",
-      Docker: "Docker",
-      Kubernetes: "Kubernetes",
-      NestJS: "NestJS",
-      TypeScript: "TypeScript",
-      JavaScript: "JavaScript",
-      Flutter: "Flutter",
-      "React Native": "React Native",
-    };
-    return map[s] ?? s;
-  };
+  const canonicalize = (s: string) => CANONICAL_MAP[s] ?? s;
 
   const computeLocalKeywords = () => {
     const lines = duties.map((d) => normalize(String(d ?? ""))).filter(Boolean);
     const counts = new Map<string, number>();
 
-    const add = (kw: string, lineIdx: number, seenInLine: Set<string>) => {
-      const k = canonicalize(normalize(kw));
+    const add = (kw: string, seenInLine: Set<string>) => {
+      const k = canonicalize(kw);
       if (!k) return;
       if (k.length < 2) return;
-      if (stopwords.has(k)) return;
+      if (STOPWORDS.has(k)) return;
       if (seenInLine.has(k)) return;
       seenInLine.add(k);
       counts.set(k, (counts.get(k) ?? 0) + 1);
@@ -129,30 +125,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const line = lines[i];
       const seen = new Set<string>();
       for (const p of strongPatterns) {
-        if (p.re.test(line)) add(p.label, i, seen);
+        if (p.re.test(line)) add(p.label, seen);
       }
 
       // 2) 추가 토픽: 한국어 키워드(2~6자) 일부만 뽑기
       const koreanWords = line.match(/[가-힣]{2,8}/g) ?? [];
       for (const w of koreanWords) {
-        // 너무 흔한 단어들 제외(간단)
-        if (
-          [
-            "작성",
-            "공유",
-            "조정",
-            "수행",
-            "경험",
-            "협업",
-            "관리",
-            "운영",
-            "개선",
-            "설계",
-            "구현",
-          ].includes(w)
-        )
-          continue;
-        add(w, i, seen);
+        if (KOREAN_COMMON_WORDS.has(w)) continue;
+        add(normalize(w), seen);
       }
     }
 
@@ -218,7 +198,7 @@ ${sample}`,
   for (const k of keywords) {
     const keyword = String(k.keyword ?? "").trim();
     if (!keyword) continue;
-    if (stopwords.has(keyword)) continue;
+    if (STOPWORDS.has(keyword)) continue;
 
     const prev = deduped.get(keyword);
     if (!prev || k.count > prev.count) {

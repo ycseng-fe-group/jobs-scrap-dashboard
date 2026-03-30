@@ -21,7 +21,11 @@ export function useStats(data: JobPosting[]) {
     const topTechs = Object.entries(techCount)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 15)
-      .map(([tech, count]) => ({ tech, count }));
+      .map(([tech, count]) => ({
+        tech,
+        count,
+        percent: totalActive > 0 ? Math.round((count / totalActive) * 100) : 0,
+      }));
 
     // By source site
     const sourceCount: Record<string, number> = {};
