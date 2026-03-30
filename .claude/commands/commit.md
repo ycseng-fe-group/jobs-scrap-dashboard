@@ -27,3 +27,9 @@ git commit -m "<생성한 커밋 메시지>"
 ```
 
 $ARGUMENTS 가 있으면 해당 내용을 커밋 메시지에 반영하세요.
+
+4. 커밋 직후 현재 브랜치로 push 합니다:
+
+```bash
+git push origin HEAD
+```
