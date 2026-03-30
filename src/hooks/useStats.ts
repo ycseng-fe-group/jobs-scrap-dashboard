@@ -14,7 +14,7 @@ export function useStats(data: JobPosting[]) {
     // Top techs
     const techCount: Record<string, number> = {};
     data.forEach((job) => {
-      job.tech_stack.forEach((t) => {
+      job.tech_stacks.forEach((t) => {
         techCount[t] = (techCount[t] ?? 0) + 1;
       });
     });
@@ -26,7 +26,7 @@ export function useStats(data: JobPosting[]) {
     // By source site
     const sourceCount: Record<string, number> = {};
     data.forEach((job) => {
-      const s = job.source_site ?? "기타";
+      const s = job.source ?? "기타";
       sourceCount[s] = (sourceCount[s] ?? 0) + 1;
     });
     const bySourceSite = Object.entries(sourceCount)
@@ -46,16 +46,6 @@ export function useStats(data: JobPosting[]) {
     });
     const recentByDay = last30.map((date) => ({ date, count: byDay[date] ?? 0 }));
 
-    // By employment type
-    const typeCount: Record<string, number> = {};
-    data.forEach((job) => {
-      const t = job.employment_type ?? "미분류";
-      typeCount[t] = (typeCount[t] ?? 0) + 1;
-    });
-    const byEmploymentType = Object.entries(typeCount)
-      .sort((a, b) => b[1] - a[1])
-      .map(([type, count]) => ({ type, count }));
-
-    return { totalActive, totalCompanies, todayCount, topTechs, bySourceSite, recentByDay, byEmploymentType };
+    return { totalActive, totalCompanies, todayCount, topTechs, bySourceSite, recentByDay };
   }, [data]);
 }

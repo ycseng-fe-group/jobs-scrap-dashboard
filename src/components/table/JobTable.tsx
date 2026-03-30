@@ -43,8 +43,6 @@ export default function JobTable({ postings }: { postings: JobPosting[] }) {
               <th className={thClass("company")} onClick={() => toggleSort("company")}>회사</th>
               <th className={thClass("title")} onClick={() => toggleSort("title")}>공고명</th>
               <th className="py-2 px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">기술스택</th>
-              <th className="py-2 px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">경력</th>
-              <th className="py-2 px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">고용형태</th>
               <th className={thClass("scraped_at")} onClick={() => toggleSort("scraped_at")}>수집일</th>
               <th className="py-2 px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">소스</th>
             </tr>

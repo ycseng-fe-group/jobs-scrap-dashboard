@@ -25,7 +25,6 @@ function normalizeTechStack(raw: unknown): string[] {
 const DEFAULT_FILTERS: JobFilters = {
   techs: [],
   sources: [],
-  employmentTypes: [],
   search: "",
 };
 
@@ -47,7 +46,7 @@ export function useJobPostings() {
         } else {
           const normalized = (rows ?? []).map((row) => ({
             ...row,
-            tech_stack: normalizeTechStack(row.tech_stack),
+            tech_stacks: normalizeTechStack(row.tech_stacks),
           })) as JobPosting[];
           setData(normalized);
         }
@@ -58,14 +57,11 @@ export function useJobPostings() {
   const postings = useMemo(() => {
     return data.filter((job) => {
       if (filters.techs.length > 0) {
-        const hasAll = filters.techs.every((t) => job.tech_stack.includes(t));
+        const hasAll = filters.techs.every((t) => job.tech_stacks.includes(t));
         if (!hasAll) return false;
       }
       if (filters.sources.length > 0) {
-        if (!job.source_site || !filters.sources.includes(job.source_site)) return false;
-      }
-      if (filters.employmentTypes.length > 0) {
-        if (!job.employment_type || !filters.employmentTypes.includes(job.employment_type)) return false;
+        if (!filters.sources.includes(job.source)) return false;
       }
       if (filters.search.trim()) {
         const q = filters.search.toLowerCase();
