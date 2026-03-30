@@ -22,7 +22,8 @@ export default function ListPage() {
         <div className="flex-1 overflow-y-auto p-6">
           <ActiveFilters
             techs={filters.techs}
-            onRemove={(tech) => setFilters({ ...filters, techs: filters.techs.filter((t) => t !== tech) })}
+            onRemove={(tech) =>
+              setFilters({ ...filters, techs: filters.techs.filter((t) => t !== tech) })}
             onClear={() => setFilters({ ...filters, techs: [] })}
           />
           <JobTable postings={postings} />

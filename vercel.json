@@ -1,0 +1,12 @@
+{
+  "buildCommand": "pnpm build",
+  "installCommand": "pnpm install",
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/((?!api/|_next/|@vite/|@react-refresh|src/|assets/|node_modules/|@fs/|@id/|favicon\\.ico|robots\\.txt).*)",
+      "destination": "/"
+    }
+  ]
+}
+
