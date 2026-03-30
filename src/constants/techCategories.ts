@@ -18,17 +18,17 @@ export const TECH_CATEGORIES: TechCategory[] = [
   {
     label: "Styling",
     color: "bg-pink-100 text-pink-800",
-    techs: ["Tailwind CSS", "Styled Components", "Emotion", "CSS Modules", "SCSS", "MUI"],
+    techs: ["Tailwind CSS", "shadcn/ui", "Styled Components", "Emotion", "CSS Modules", "SCSS", "MUI"],
   },
   {
     label: "State Management",
     color: "bg-orange-100 text-orange-800",
-    techs: ["Redux", "Zustand", "Jotai", "Recoil", "MobX", "React Query", "SWR", "TanStack Query"],
+    techs: ["Redux", "Zustand", "Jotai", "Recoil", "MobX", "SWR", "TanStack Query"],
   },
   {
     label: "Build / Tooling",
     color: "bg-yellow-100 text-yellow-800",
-    techs: ["Vite", "Webpack", "Turborepo", "Nx", "Rollup"],
+    techs: ["Vite", "Webpack", "Turborepo", "Nx", "Rollup", "Bun", "Biome"],
   },
   {
     label: "Testing",
@@ -66,4 +66,7 @@ export const TECH_ALIASES: Record<string, string> = {
   "styled-components": "Styled Components",
   "react-query": "React Query",
   tanstack: "TanStack Query",
+  "tanstack-query": "TanStack Query",
+  shadcn: "shadcn/ui",
+  "shadcn-ui": "shadcn/ui",
 };
