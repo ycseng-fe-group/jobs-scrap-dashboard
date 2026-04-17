@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "vite:dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "vercel:dev": "vercel dev --listen 3000"

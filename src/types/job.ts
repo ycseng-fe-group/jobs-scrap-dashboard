@@ -10,6 +10,9 @@ export interface JobPosting {
   required: string[];
   preferred: string[];
   duties: string[];
+  career: string;
+  end_at: string | null;
+  always_recruit: boolean;
   scraped_at: string;
   created_at: string;
   updated_at: string;

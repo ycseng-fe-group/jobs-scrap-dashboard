@@ -2,11 +2,25 @@ import { useState } from "react";
 import type { JobPosting } from "@/types/job";
 import TechBadge from "./TechBadge";
 
+const SOURCE_LABEL: Record<string, string> = {
+  wanted: "원티드",
+  jobkorea: "잡코리아",
+  saramin: "사람인",
+};
+
+function formatDeadline(job: JobPosting): string {
+  if (job.always_recruit) return "상시채용";
+  if (job.end_at) {
+    return new Intl.DateTimeFormat("ko-KR", { month: "2-digit", day: "2-digit" }).format(new Date(job.end_at));
+  }
+  return "-";
+}
+
 export default function JobTableRow({ job }: { job: JobPosting }) {
   const [expanded, setExpanded] = useState(false);
   const visibleTechs = expanded ? job.tech_stacks : job.tech_stacks.slice(0, 4);
   const hiddenCount = job.tech_stacks.length - 4;
-  const dateStr = job.scraped_at
+  const scrapedStr = job.scraped_at
     ? new Intl.DateTimeFormat("ko-KR", { month: "2-digit", day: "2-digit" }).format(new Date(job.scraped_at))
     : "-";
 
@@ -38,8 +52,10 @@ export default function JobTableRow({ job }: { job: JobPosting }) {
           )}
         </div>
       </td>
-      <td className="py-3 px-4 text-sm text-gray-400 whitespace-nowrap">{dateStr}</td>
-      <td className="py-3 px-4 text-sm text-gray-400">{job.source}</td>
+      <td className="py-3 px-4 text-sm text-gray-500 whitespace-nowrap">{job.career || "-"}</td>
+      <td className="py-3 px-4 text-sm text-gray-400 whitespace-nowrap">{scrapedStr}</td>
+      <td className="py-3 px-4 text-sm text-gray-400 whitespace-nowrap">{formatDeadline(job)}</td>
+      <td className="py-3 px-4 text-sm text-gray-400">{SOURCE_LABEL[job.source] ?? job.source}</td>
     </tr>
   );
 }

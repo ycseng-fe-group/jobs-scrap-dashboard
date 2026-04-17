@@ -52,8 +52,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!duties?.length)
     return res.status(400).json({ error: "duties is required" });
 
-  const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-
   // ---- fallback(LLM 실패시 로컬 가공) ----
   const normalize = (s: string) =>
     s
