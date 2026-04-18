@@ -52,7 +52,7 @@ export default function JobTableRow({ job }: { job: JobPosting }) {
           )}
         </div>
       </td>
-      <td className="py-3 px-4 text-sm text-gray-500 whitespace-nowrap">{job.career || "-"}</td>
+      <td className="py-3 px-4 text-sm text-gray-500 whitespace-nowrap">{job.always_recruit ? "상시채용" : job.career || "-"}</td>
       <td className="py-3 px-4 text-sm text-gray-400 whitespace-nowrap">{scrapedStr}</td>
       <td className="py-3 px-4 text-sm text-gray-400 whitespace-nowrap">{formatDeadline(job)}</td>
       <td className="py-3 px-4 text-sm text-gray-400">{SOURCE_LABEL[job.source] ?? job.source}</td>
