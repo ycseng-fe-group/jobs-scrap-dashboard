@@ -1,4 +1,4 @@
-import { useJobPostingsContext as useJobPostings } from "@/context/JobPostingsContext";
+import { useDashboardData } from "@/hooks/useDashboardData";
 import { useStats } from "@/hooks/useStats";
 import { useDutiesStats } from "@/hooks/useDutiesStats";
 import StatCardRow from "@/components/cards/StatCardRow";
@@ -10,9 +10,9 @@ import DutiesKeywordChart from "@/components/charts/DutiesKeywordChart";
 import Spinner from "@/components/ui/Spinner";
 
 export default function DashboardPage() {
-  const { allData, loading, error } = useJobPostings();
-  const stats = useStats(allData);
-  const duties = useDutiesStats(allData);
+  const { data, loading, error } = useDashboardData();
+  const stats = useStats(data);
+  const duties = useDutiesStats(data);
 
   if (loading) return <Spinner />;
   if (error) return <div className="p-6 text-red-500">오류: {error}</div>;

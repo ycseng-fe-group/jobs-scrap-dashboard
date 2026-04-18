@@ -4,7 +4,6 @@ import type { JobPosting, JobFilters } from "@/types/job";
 
 interface JobPostingsContextValue {
   postings: JobPosting[];
-  allData: JobPosting[];
   loading: boolean;
   error: string | null;
   filters: JobFilters;

@@ -1,27 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { supabase } from "@/lib/supabase";
 import type { JobPosting, JobFilters } from "@/types/job";
-import { TECH_ALIASES } from "@/constants/techCategories";
+import { normalizeTechStack } from "@/utils/techStack";
 import { normalizeCareer, careerFilterCategory } from "@/utils/career";
-
-function normalizeTechStack(raw: unknown): string[] {
-  let arr: string[];
-  if (Array.isArray(raw)) {
-    arr = raw as string[];
-  } else if (typeof raw === "string") {
-    try {
-      arr = JSON.parse(raw);
-    } catch {
-      arr = [raw];
-    }
-  } else {
-    return [];
-  }
-  return arr.map((t) => {
-    const lower = t.toLowerCase().trim();
-    return TECH_ALIASES[lower] ?? t.trim();
-  });
-}
 
 const today = new Date().toISOString().slice(0, 10);
 
@@ -41,23 +21,18 @@ export function useJobPostings() {
 
   useEffect(() => {
     setLoading(true);
-    supabase
-      .from("job_postings")
-      .select("*")
-      .order("scraped_at", { ascending: false })
-      .then(({ data: rows, error: err }) => {
-        if (err) {
-          setError(err.message);
-        } else {
-          const normalized = (rows ?? []).map((row) => ({
-            ...row,
-            tech_stacks: normalizeTechStack(row.tech_stacks),
-          })) as JobPosting[];
-          setData(normalized);
-        }
-        setLoading(false);
-      });
-  }, []);
+    setError(null);
+    const url = filters.date
+      ? `/api/job-postings?date=${filters.date}`
+      : "/api/job-postings";
+    fetch(url)
+      .then((r) => r.json())
+      .then((rows: JobPosting[]) => {
+        setData(rows.map((row) => ({ ...row, tech_stacks: normalizeTechStack(row.tech_stacks) })));
+      })
+      .catch((e: Error) => setError(e.message))
+      .finally(() => setLoading(false));
+  }, [filters.date]);
 
   const postings = useMemo(() => {
     return data.filter((job) => {
@@ -72,9 +47,6 @@ export function useJobPostings() {
         const q = filters.search.toLowerCase();
         if (!job.title.toLowerCase().includes(q) && !job.company.toLowerCase().includes(q)) return false;
       }
-      if (filters.date) {
-        if (job.scraped_at.slice(0, 10) !== filters.date) return false;
-      }
       if (filters.careers.length > 0) {
         const label = job.always_recruit ? "상시채용" : normalizeCareer(job.career?.trim() ?? "");
         const category = careerFilterCategory(label);
@@ -84,5 +56,5 @@ export function useJobPostings() {
     });
   }, [data, filters]);
 
-  return { postings, allData: data, loading, error, filters, setFilters, totalCount: data.length };
+  return { postings, loading, error, filters, setFilters, totalCount: data.length };
 }
