@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { JobPosting } from "@/types/job";
 import JobTableRow from "./JobTableRow";
 import Pagination from "./Pagination";
@@ -12,6 +12,8 @@ export default function JobTable({ postings }: { postings: JobPosting[] }) {
   const [page, setPage] = useState(1);
   const [sortKey, setSortKey] = useState<SortKey>("scraped_at");
   const [sortAsc, setSortAsc] = useState(false);
+
+  useEffect(() => { setPage(1); }, [postings]);
 
   const sorted = [...postings].sort((a, b) => {
     const va = a[sortKey] ?? "";
