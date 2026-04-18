@@ -26,13 +26,15 @@ export default function DashboardPage() {
         todayCount={stats.todayCount}
         topTech={stats.topTechs[0]?.tech ?? "-"}
       />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <TechBarChart data={stats.topTechs} />
-        <CareerBarChart data={stats.careerStats} />
-      </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-2">
+          <TechBarChart data={stats.topTechs} />
+        </div>
+        <div>
           <SourcePieChart data={stats.bySourceSite} />
+        </div>
+        <div className="lg:col-span-3">
+          <CareerBarChart data={stats.careerStats} />
         </div>
       </div>
       <TechTrendChart data={stats.recentByDay} />
