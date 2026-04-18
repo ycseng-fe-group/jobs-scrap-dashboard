@@ -65,8 +65,21 @@ export function useStats(data: JobPosting[]) {
       }
       // always_recruit=false 이고 career 없음 → 경력 수집 전 데이터, 제외
     });
+    // 상시채용 → 신입·경력 → 신입 → 경력(고연차→저연차) 순 정렬
+    const careerOrder = (label: string): [number, number] => {
+      if (label === "상시채용") return [0, 0];
+      if (/신입.{0,3}경력|경력.{0,3}신입/i.test(label)) return [1, 0];
+      if (/^신입$/.test(label)) return [2, 0];
+      const years = label.match(/(\d+)/);
+      return [3, years ? -parseInt(years[1]) : 0]; // 숫자 높을수록 앞으로
+    };
+
     const careerStats = Object.entries(careerCount)
-      .sort((a, b) => b[1] - a[1])
+      .sort(([a], [b]) => {
+        const [ao, an] = careerOrder(a);
+        const [bo, bn] = careerOrder(b);
+        return ao !== bo ? ao - bo : an - bn;
+      })
       .map(([career, count]) => ({
         career,
         count,
