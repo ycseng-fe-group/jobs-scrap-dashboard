@@ -4,6 +4,7 @@ import { useDutiesStats } from "@/hooks/useDutiesStats";
 import StatCardRow from "@/components/cards/StatCardRow";
 import TechBarChart from "@/components/charts/TechBarChart";
 import SourcePieChart from "@/components/charts/SourcePieChart";
+import CareerPieChart from "@/components/charts/CareerPieChart";
 import TechTrendChart from "@/components/charts/TechTrendChart";
 import DutiesKeywordChart from "@/components/charts/DutiesKeywordChart";
 import Spinner from "@/components/ui/Spinner";
@@ -29,8 +30,9 @@ export default function DashboardPage() {
         <div className="lg:col-span-2">
           <TechBarChart data={stats.topTechs} />
         </div>
-        <div>
+        <div className="flex flex-col gap-4">
           <SourcePieChart data={stats.bySourceSite} />
+          <CareerPieChart data={stats.careerStats} />
         </div>
       </div>
       <TechTrendChart data={stats.recentByDay} />

@@ -50,6 +50,23 @@ export function useStats(data: JobPosting[]) {
     });
     const recentByDay = last30.map((date) => ({ date, count: byDay[date] ?? 0 }));
 
-    return { totalActive, totalCompanies, todayCount, topTechs, bySourceSite, recentByDay };
+    // Career distribution
+    // 2026-04-16 이전 데이터는 경력 정보를 수집하지 않았으므로 별도 분류
+    const CAREER_COLLECTION_START = "2026-04-16";
+    const careerCount: Record<string, number> = {};
+    data.forEach((job) => {
+      const scrapedDate = job.scraped_at?.slice(0, 10) ?? "";
+      if (scrapedDate < CAREER_COLLECTION_START) {
+        careerCount["수집 전"] = (careerCount["수집 전"] ?? 0) + 1;
+      } else {
+        const label = job.career?.trim() || "상시채용";
+        careerCount[label] = (careerCount[label] ?? 0) + 1;
+      }
+    });
+    const careerStats = Object.entries(careerCount)
+      .sort((a, b) => b[1] - a[1])
+      .map(([career, count]) => ({ career, count }));
+
+    return { totalActive, totalCompanies, todayCount, topTechs, bySourceSite, recentByDay, careerStats };
   }, [data]);
 }
