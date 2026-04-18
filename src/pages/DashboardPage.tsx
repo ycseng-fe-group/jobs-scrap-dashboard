@@ -33,11 +33,9 @@ export default function DashboardPage() {
         <div>
           <SourcePieChart data={stats.bySourceSite} />
         </div>
-        <div className="lg:col-span-3">
-          <CareerBarChart data={stats.careerStats} />
-        </div>
       </div>
       <TechTrendChart data={stats.recentByDay} />
+      <CareerBarChart data={stats.careerStats} />
       <div>
         {duties.loading && (
           <div className="bg-white rounded-xl border border-gray-200 p-5 text-sm text-gray-500 text-center">
