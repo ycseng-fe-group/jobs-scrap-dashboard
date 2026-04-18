@@ -59,7 +59,9 @@ export function useStats(data: JobPosting[]) {
         careerCount["상시채용"] = (careerCount["상시채용"] ?? 0) + 1;
         careerTotal++;
       } else if (job.career?.trim()) {
-        const label = job.career.trim();
+        const raw = job.career.trim();
+        // 신입/경력, 신입·경력 등 표기 통합
+        const label = /신입.{0,3}경력|경력.{0,3}신입/i.test(raw) ? "신입·경력" : raw;
         careerCount[label] = (careerCount[label] ?? 0) + 1;
         careerTotal++;
       }
