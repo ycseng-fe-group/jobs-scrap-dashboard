@@ -60,7 +60,6 @@ export default function FilterPanel({ filters, setFilters }: Props) {
           onChange={(d: Date | null) => setFilters({ ...filters, date: d ? d.toISOString().slice(0, 10) : "" })}
           dateFormat="yyyy-MM-dd"
           placeholderText="날짜 선택"
-          isClearable
           className="w-full text-xs border border-gray-300 rounded-lg px-2.5 py-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-indigo-400"
         />
       </div>

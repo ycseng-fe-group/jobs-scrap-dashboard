@@ -8,7 +8,6 @@ import Spinner from "@/components/ui/Spinner";
 export default function ListPage() {
   const { postings, loading, error, filters, setFilters } = useJobPostings();
 
-  if (loading) return <Spinner />;
   if (error) return <div className="p-6 text-red-500">오류: {error}</div>;
 
   return (
@@ -26,7 +25,7 @@ export default function ListPage() {
               setFilters({ ...filters, techs: filters.techs.filter((t) => t !== tech) })}
             onClear={() => setFilters({ ...filters, techs: [] })}
           />
-          <JobTable postings={postings} />
+          {loading ? <Spinner /> : <JobTable postings={postings} />}
         </div>
       </div>
     </div>
