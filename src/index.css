@@ -7,3 +7,9 @@
     @apply bg-gray-50 text-gray-900 antialiased;
   }
 }
+
+.react-datepicker__close-icon::after {
+  background-color: transparent !important;
+  color: #9ca3af !important;
+  font-size: 14px !important;
+}

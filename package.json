@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.43.4",
+    "@types/react-datepicker": "^7.0.0",
     "@vercel/node": "^5.6.22",
     "groq-sdk": "^1.1.2",
     "react": "^18.3.1",
+    "react-datepicker": "^9.1.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.23.1",
     "recharts": "^2.12.7"

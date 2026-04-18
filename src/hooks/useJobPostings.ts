@@ -22,10 +22,13 @@ function normalizeTechStack(raw: unknown): string[] {
   });
 }
 
+const today = new Date().toISOString().slice(0, 10);
+
 const DEFAULT_FILTERS: JobFilters = {
   techs: [],
   sources: [],
   search: "",
+  date: today,
 };
 
 export function useJobPostings() {
@@ -66,6 +69,9 @@ export function useJobPostings() {
       if (filters.search.trim()) {
         const q = filters.search.toLowerCase();
         if (!job.title.toLowerCase().includes(q) && !job.company.toLowerCase().includes(q)) return false;
+      }
+      if (filters.date) {
+        if (job.scraped_at.slice(0, 10) !== filters.date) return false;
       }
       return true;
     });
