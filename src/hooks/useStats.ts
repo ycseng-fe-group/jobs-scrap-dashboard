@@ -51,16 +51,19 @@ export function useStats(data: JobPosting[]) {
     const recentByDay = last30.map((date) => ({ date, count: byDay[date] ?? 0 }));
 
     // Career distribution
-    // 2026-04-16 이전 데이터는 경력 정보를 수집하지 않았으므로 집계에서 제외
-    const CAREER_COLLECTION_START = "2026-04-16";
+    // always_recruit=true 이면 상시채용, career 값이 없고 always_recruit=false 이면 수집 전 데이터이므로 제외
     const careerCount: Record<string, number> = {};
     let careerTotal = 0;
     data.forEach((job) => {
-      const scrapedDate = job.scraped_at?.slice(0, 10) ?? "";
-      if (scrapedDate < CAREER_COLLECTION_START) return;
-      const label = job.career?.trim() || "상시채용";
-      careerCount[label] = (careerCount[label] ?? 0) + 1;
-      careerTotal++;
+      if (job.always_recruit) {
+        careerCount["상시채용"] = (careerCount["상시채용"] ?? 0) + 1;
+        careerTotal++;
+      } else if (job.career?.trim()) {
+        const label = job.career.trim();
+        careerCount[label] = (careerCount[label] ?? 0) + 1;
+        careerTotal++;
+      }
+      // always_recruit=false 이고 career 없음 → 경력 수집 전 데이터, 제외
     });
     const careerStats = Object.entries(careerCount)
       .sort((a, b) => b[1] - a[1])
