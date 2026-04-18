@@ -6,14 +6,16 @@ import { JobPostingsProvider } from "@/context/JobPostingsContext";
 
 export default function App() {
   return (
-    <JobPostingsProvider>
-      <AppShell>
-        <Routes>
-          <Route path="/" element={<DashboardPage />} />
-          <Route path="/list" element={<ListPage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </AppShell>
-    </JobPostingsProvider>
+    <AppShell>
+      <Routes>
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="/list" element={
+          <JobPostingsProvider>
+            <ListPage />
+          </JobPostingsProvider>
+        } />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </AppShell>
   );
 }
