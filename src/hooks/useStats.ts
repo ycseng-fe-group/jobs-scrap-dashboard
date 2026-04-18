@@ -1,14 +1,6 @@
 import { useMemo } from "react";
 import type { JobPosting } from "@/types/job";
-
-// 다양한 경력 표기를 "경력 N년 이상" 형식으로 통합
-// 예: "경력3년↑", "경력3년이상", "경력 3년+", "경력3년 이상" → "경력 3년 이상"
-function normalizeCareer(raw: string): string {
-  if (/신입.{0,3}경력|경력.{0,3}신입/i.test(raw)) return "신입·경력";
-  const yearMatch = raw.match(/경력\s*(\d+)\s*년/);
-  if (yearMatch) return `경력 ${yearMatch[1]}년 이상`;
-  return raw;
-}
+import { normalizeCareer } from "@/utils/career";
 
 export function useStats(data: JobPosting[]) {
   return useMemo(() => {

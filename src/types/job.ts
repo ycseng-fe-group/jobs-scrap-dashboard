@@ -23,4 +23,5 @@ export interface JobFilters {
   sources: string[];
   search: string;
   date: string; // YYYY-MM-DD, "" = 전체
+  careers: string[];
 }

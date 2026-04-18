@@ -15,6 +15,8 @@ const SOURCES = [
   { value: "saramin", label: "사람인" },
 ];
 
+const CAREERS = ["상시채용", "신입·경력", "신입", "경력무관", "경력"];
+
 export default function FilterPanel({ filters, setFilters }: Props) {
   function setTechs(techs: string[]) {
     setFilters({ ...filters, techs });
@@ -27,7 +29,15 @@ export default function FilterPanel({ filters, setFilters }: Props) {
     setFilters({ ...filters, sources });
   }
 
-  const hasActiveFilters = filters.techs.length > 0 || filters.sources.length > 0 || filters.date !== "";
+  function toggleCareer(value: string) {
+    const careers = filters.careers.includes(value)
+      ? filters.careers.filter((c) => c !== value)
+      : [...filters.careers, value];
+    setFilters({ ...filters, careers });
+  }
+
+  const hasActiveFilters =
+    filters.techs.length > 0 || filters.sources.length > 0 || filters.date !== "" || filters.careers.length > 0;
 
   return (
     <aside className="w-full lg:w-60 shrink-0 bg-white border-b lg:border-b-0 lg:border-r border-gray-200 p-4 overflow-y-auto max-h-80 sm:max-h-96 lg:max-h-none">
@@ -35,7 +45,7 @@ export default function FilterPanel({ filters, setFilters }: Props) {
         <h2 className="text-sm font-semibold text-gray-700">필터</h2>
         {hasActiveFilters && (
           <button
-            onClick={() => setFilters({ ...filters, techs: [], sources: [], date: "" })}
+            onClick={() => setFilters({ ...filters, techs: [], sources: [], date: "", careers: [] })}
             className="text-xs text-red-400 hover:text-red-600"
           >
             초기화
@@ -53,6 +63,28 @@ export default function FilterPanel({ filters, setFilters }: Props) {
           isClearable
           className="w-full text-xs border border-gray-300 rounded-lg px-2.5 py-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-indigo-400"
         />
+      </div>
+
+      <div className="mb-4">
+        <p className="text-xs font-medium text-gray-500 mb-2">경력</p>
+        <div className="flex flex-wrap gap-2">
+          {CAREERS.map((value) => {
+            const active = filters.careers.includes(value);
+            return (
+              <button
+                key={value}
+                onClick={() => toggleCareer(value)}
+                className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
+                  active
+                    ? "bg-indigo-600 text-white border-indigo-600"
+                    : "bg-white text-gray-600 border-gray-300 hover:border-indigo-400"
+                }`}
+              >
+                {value}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <div className="mb-4">

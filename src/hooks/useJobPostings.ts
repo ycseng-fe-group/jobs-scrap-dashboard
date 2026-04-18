@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { JobPosting, JobFilters } from "@/types/job";
 import { TECH_ALIASES } from "@/constants/techCategories";
+import { normalizeCareer, careerFilterCategory } from "@/utils/career";
 
 function normalizeTechStack(raw: unknown): string[] {
   let arr: string[];
@@ -29,6 +30,7 @@ const DEFAULT_FILTERS: JobFilters = {
   sources: [],
   search: "",
   date: today,
+  careers: [],
 };
 
 export function useJobPostings() {
@@ -72,6 +74,11 @@ export function useJobPostings() {
       }
       if (filters.date) {
         if (job.scraped_at.slice(0, 10) !== filters.date) return false;
+      }
+      if (filters.careers.length > 0) {
+        const label = job.always_recruit ? "상시채용" : normalizeCareer(job.career?.trim() ?? "");
+        const category = careerFilterCategory(label);
+        if (!filters.careers.includes(category)) return false;
       }
       return true;
     });
