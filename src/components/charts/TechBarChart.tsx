@@ -28,6 +28,7 @@ export default function TechBarChart({ data }: Props) {
                 "bg-purple-100": "#e9d5ff",
                 "bg-pink-100": "#fce7f3",
                 "bg-orange-100": "#ffedd5",
+                "bg-cyan-100": "#cffafe",
                 "bg-yellow-100": "#fef9c3",
                 "bg-green-100": "#dcfce7",
                 "bg-gray-100": "#f3f4f6",
