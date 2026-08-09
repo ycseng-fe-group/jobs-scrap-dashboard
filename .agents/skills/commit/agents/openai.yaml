@@ -1,0 +1,4 @@
+interface:
+  display_name: "Commit and Push"
+  short_description: "Review changes, commit safely, and push the branch"
+  default_prompt: "Use $commit to review current changes, create a conventional commit, and push it."

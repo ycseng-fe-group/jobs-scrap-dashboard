@@ -1,25 +1,20 @@
 import { useEffect, useState } from "react";
-import type { JobPosting } from "@/types/job";
-
 export interface DutiesKeyword {
   keyword: string;
   count: number;
   percent: number;
 }
 
-export function useDutiesStats(allData: JobPosting[]) {
+export function useDutiesStats(duties: string[], totalItems: number) {
   const [keywords, setKeywords] = useState<DutiesKeyword[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!allData.length) return;
+    if (!duties.length) return;
 
     setLoading(true);
     setError(null);
-    const duties = allData.flatMap((job) => job.duties);
-    const totalItems = duties.length;
-
     fetch("/api/duties-stats", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -32,7 +27,7 @@ export function useDutiesStats(allData: JobPosting[]) {
       })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
-  }, [allData]);
+  }, [duties, totalItems]);
 
   return { keywords, loading, error };
 }

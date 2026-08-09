@@ -1,0 +1,4 @@
+interface:
+  display_name: "Feature Workflow"
+  short_description: "Implement, review, build, commit, and deploy features"
+  default_prompt: "Use $feature to implement this feature through validation and delivery."

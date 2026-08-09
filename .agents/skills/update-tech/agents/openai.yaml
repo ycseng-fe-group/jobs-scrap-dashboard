@@ -1,0 +1,4 @@
+interface:
+  display_name: "Update Tech Stack"
+  short_description: "Refresh frontend technology categories using current trends"
+  default_prompt: "Use $update-tech to review and update the frontend technology categories."
